@@ -5,10 +5,14 @@ html, body {
 #chat-wrap {
   background: #ddd;
   min-height: 300px;
+  padding: 10px;
 }
 
 #chat-wrap #chat-content {
+  background: #fff;
+  height: 500px;
 }
 
 #chat-wrap #chat-input {
+  margin-top: 10px;
 }

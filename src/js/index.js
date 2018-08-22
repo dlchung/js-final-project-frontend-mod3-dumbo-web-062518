@@ -1,3 +1,3 @@
-document.AddEventListener("DOMContentLoaded", () => {
-  
+document.addEventListener("DOMContentLoaded", () => {
+  const chatWebSocket = openConnection()
 })
