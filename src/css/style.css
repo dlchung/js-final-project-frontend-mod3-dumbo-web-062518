@@ -1,0 +1,14 @@
+html, body {
+  background: #eee;
+}
+
+#chat-wrap {
+  background: #ddd;
+  min-height: 300px;
+}
+
+#chat-wrap #chat-content {
+}
+
+#chat-wrap #chat-input {
+}
