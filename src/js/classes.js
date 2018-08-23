@@ -81,15 +81,21 @@ class Lol {
   }
 
   pirateSpeak() {
-    
+    const newMsg = []
+    const splitMsg = this.message.split("")
+
+    splitMsg.forEach(letter => {
+      if(letter === "r" || letter === "R") {
+        // const randNum = Math.floor(Math.random() * 2)
+        if(letter === "r") {
+          newMsg.push("arrrgh")
+        } else {
+          newMsg.push("Arrrgh")
+        }
+      } else {
+        newMsg.push(letter)
+      }
+    })
+    return newMsg.join("")
   }
 }
-
-// class WebSocket {
-//   constructor(url, protocols) {
-//     this.url = url
-//     this.protocols = protocols
-//   }
-//
-//   const chatSocket = new WebSocket(this.url)
-// }
