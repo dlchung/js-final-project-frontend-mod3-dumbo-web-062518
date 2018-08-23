@@ -56,7 +56,8 @@ document.addEventListener("DOMContentLoaded", () => {
     const welcomeMessage = document.createElement("p")
     const onlineNow = document.createElement('li')
     onlineNow.id = sessionStorage.getItem('username')
-    onlineNow.innerText = userName.value
+    onlineList.innerHTML = ''
+    onlineNow.innerHTML = userName.value
     welcomeMessage.innerText = `${userName.value} has logged in!`
     onlineList.append(onlineNow)
     chatContent.append(welcomeMessage)
