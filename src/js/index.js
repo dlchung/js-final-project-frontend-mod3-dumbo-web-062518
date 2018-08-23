@@ -26,6 +26,7 @@ document.addEventListener("DOMContentLoaded", () => {
         chatContent.append(newMessage)
       }
     }
+    scrollDown()
   }
 
 
@@ -81,3 +82,8 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
 })
+
+function scrollDown() {
+  const chatContent = document.querySelector("#chat-content")
+  chatContent.scrollTop = chatContent.scrollHeight
+}
