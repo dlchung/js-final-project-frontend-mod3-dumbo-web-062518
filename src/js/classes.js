@@ -23,7 +23,7 @@ class Lol {
 
   randomEffect() {
     const effects = [
-      this.reverse(),
+      this.reverseMessage(),
       this.upsideDown(),
       this.removeVowels(),
       this.leetSpeak(),
@@ -33,7 +33,7 @@ class Lol {
     return effects[Math.floor(Math.random() * effects.length)]
   }
 
-  reverse() {
+  reverseMessage() {
     const newMsg = this.message.split("")
     return newMsg.reverse().join("")
   }
