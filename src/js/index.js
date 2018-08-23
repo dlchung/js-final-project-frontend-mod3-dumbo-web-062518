@@ -14,15 +14,15 @@ document.addEventListener("DOMContentLoaded", () => {
     const result = JSON.parse(event.data)
     if(result["message"]["content"]) {
       if(result["message"]["username"] === "null"){
-        const newText = result["message"]["content"]
+        const newText = new Lol(result["message"]["content"])
         const newMessage = document.createElement("p")
-        newMessage.innerText = `Anon: ${newText}`
+        newMessage.innerText = `Anon: ${newText.randomEffect()}`
         chatContent.append(newMessage)
       } else {
         const user = result["message"]["username"]
-        const newText = result["message"]["content"]
+        const newText = new Lol(result["message"]["content"])
         const newMessage = document.createElement("p")
-        newMessage.innerText = `${user}: ${newText}`
+        newMessage.innerText = `${user}: ${newText.randomEffect()}`
         chatContent.append(newMessage)
       }
     }
