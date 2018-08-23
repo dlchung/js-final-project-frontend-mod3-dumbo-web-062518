@@ -13,11 +13,18 @@ document.addEventListener("DOMContentLoaded", () => {
   chatWebSocket.onmessage = event => {
     const result = JSON.parse(event.data)
     if(result["message"]["content"]) {
-      const user = result["message"]["username"]
-      const newText = result["message"]["content"]
-      const newMessage = document.createElement("p")
-      newMessage.innerText = `${user}: ${newText}`
-      chatContent.append(newMessage)
+      if(result["message"]["username"] === "null"){
+        const newText = result["message"]["content"]
+        const newMessage = document.createElement("p")
+        newMessage.innerText = `Anon: ${newText}`
+        chatContent.append(newMessage)
+      } else {
+        const user = result["message"]["username"]
+        const newText = result["message"]["content"]
+        const newMessage = document.createElement("p")
+        newMessage.innerText = `${user}: ${newText}`
+        chatContent.append(newMessage)
+      }
     }
   }
 
