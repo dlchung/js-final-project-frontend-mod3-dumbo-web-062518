@@ -65,6 +65,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const currentUser = sessionStorage.setItem('username', userName.value)
     const logoutBtn = document.createElement('button')
     logoutBtn.innerText = "Logout"
+    logoutBtn.className = "btn btn-danger"
     logoutBtn.onclick = () => {
       sessionStorage.clear();
       onlineNow.innerHTML = ''
