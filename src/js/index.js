@@ -40,6 +40,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // const msg = {"command":"message","identifier":"{\"channel\":\"ChatMessagesChannel\"}","data":"{\"message\":\"hello\",\"action\":\"chat\"}"}
     const msg = {"command":"message","identifier":"{\"channel\":\"ChatMessagesChannel\"}","data":`{\"action\": \"chat\", \"content\": \"${chatField.value}\", \"username\": \"${sessionStorage.getItem('username')}\" }`}
     chatWebSocket.send(JSON.stringify(msg))
+    chatField.value = ""
     // console.log(msg)
   }
 
