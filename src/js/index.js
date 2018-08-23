@@ -36,13 +36,21 @@ document.addEventListener("DOMContentLoaded", () => {
 
   userWebSocket.onmessage = event => {
     const result = JSON.parse(event.data)
-    if (result["message"]["users"]) {
-      const user = result["message"]["users"]
+    if (result["message"]["username"]) {
+      const user = result["message"]["username"]
       const onlineNow = document.createElement('li')
       onlineNow.id = user
       onlineNow.innerHTML = user
       onlineList.append(onlineNow)
     }
+    // else if (result["message"]["logout"]) {
+    //   sessionStorage.clear()
+    //   onlineUser.innerHTML = ''
+    //   currentU.innerHTML = ''
+    //   onlineList.innerHTML = "You are not logged in!"
+    //   h.innerText = 'Logged Out!'
+    //   currentU.append(h)
+    // }
   }
 
 
@@ -63,7 +71,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const userName = document.getElementById('user-field')
   const userBtn = document.getElementById('submitUser')
   userBtn.onclick = () => {
-    event.preventDefault()
+    // event.preventDefault()
 
     document.getElementById('userForm').innerHTML = ''
     document.getElementById('user-name').innerHTML = `Logged in as: ${userName.value}`
@@ -79,14 +87,16 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const currentUser = sessionStorage.setItem('username', userName.value)
 
-    const msg = {"command":"message","identifier":"{\"channel\":\"UsersOnlineChannel\"}","data":`{\"action\": \"user\", \"username\": \"${sessionStorage.getItem('username')}\" }`}
-    chatWebSocket.send(JSON.stringify(msg))
+    const msg = {"command":"message","identifier":"{\"channel\":\"UsersOnlineChannel\"}","data":`{\"action\": \"user\", \"username\": \"${sessionStorage.getItem('username')}\"}`}
+    userWebSocket.send(JSON.stringify(msg))
 
     const logoutBtn = document.createElement('button')
     logoutBtn.innerText = "Logout"
     logoutBtn.className = "btn btn-danger"
     logoutBtn.onclick = () => {
       const onlineUser = document.getElementById(`${sessionStorage.getItem('username')}`)
+      const msg = {"command":"message","identifier":"{\"channel\":\"UsersOnlineChannel\"}","data":`{\"action\": \"user\", \"username\": \"${sessionStorage.getItem('username')}\", \"logout\": \"${sessionStorage.getItem('username')}}`}
+      userWebSocket.send(JSON.stringify(msg))
       sessionStorage.clear();
       onlineUser.innerHTML = ''
       currentU.innerHTML = ''
@@ -94,6 +104,8 @@ document.addEventListener("DOMContentLoaded", () => {
       const h = document.createElement('h4')
       h.innerText = 'Logged Out!'
       currentU.append(h)
+
+
     }
     currentU.append(logoutBtn)
   }
