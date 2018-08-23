@@ -21,13 +21,12 @@ class Lol {
     this.message = message
   }
 
-  // Reverses text message
   reverse() {
     const newMsg = this.message.split("")
     return newMsg.reverse().join("")
   }
 
-  upsidedown() {
+  upsideDown() {
     const dictionary = {
       "a": "ɐ", "b": "q", "c": "ɔ", "d": "p", "e": "ǝ", "f": "ɟ", "g": "ƃ",
       "h": "ɥ", "i": "ı", "j": "ɾ", "k": "ʞ", "l": "ן", "m": "ɯ", "n": "u",
@@ -51,7 +50,39 @@ class Lol {
     return newMsg.join("")
   }
 
-  
+  removeVowels() {
+    const regex = /[aeiou]/gi
+    return this.message.replace(regex, "")
+  }
+
+  leetSpeak() {
+    const dictionary = {
+      "e": "3", "l": "1", "t": "7", "s": "5", "a": "4", "o": "0",
+      "E": "3", "L": "1", "T": "7", "S": "5", "A": "4", "O": "0",
+    }
+
+    const newMsg = []
+    const splitMsg = this.message.split("")
+    splitMsg.forEach(letter => {
+      dictionary[letter] ? newMsg.push(dictionary[letter]) : newMsg.push(letter)
+    })
+    return newMsg.join("")
+  }
+
+  binary() {
+    const newMsg = []
+    const splitMsg = this.message.split("")
+
+    splitMsg.forEach(letter => {
+      newMsg.push(letter.charCodeAt(0).toString(2))
+    })
+
+    return newMsg.join("")
+  }
+
+  pirateSpeak() {
+    
+  }
 }
 
 // class WebSocket {
