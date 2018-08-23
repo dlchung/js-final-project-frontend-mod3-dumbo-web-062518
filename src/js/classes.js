@@ -89,7 +89,9 @@ class Lol {
       newMsg.push(letter.charCodeAt(0).toString(2))
     })
 
-    return newMsg.join("")
+    const joinedMsg = newMsg.join("").toString().match(/.{10}/g)
+
+    return joinedMsg
   }
 
   pirateSpeak() {
