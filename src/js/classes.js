@@ -89,7 +89,7 @@ class Lol {
       newMsg.push(letter.charCodeAt(0).toString(2))
     })
 
-    const joinedMsg = newMsg.join("").toString().match(/.{10}/g)
+    const joinedMsg = newMsg.join("").toString().match(/.{10}/g).join(" ")
 
     return joinedMsg
   }
