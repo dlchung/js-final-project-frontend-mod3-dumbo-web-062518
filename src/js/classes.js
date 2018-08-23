@@ -97,19 +97,28 @@ class Lol {
   pirateSpeak() {
     const newMsg = []
     const splitMsg = this.message.split("")
+    const randNum = Math.floor(Math.random() * 10)
+    let prepend = "Arrrrrrrgh! "
+    let append = " arggghh!"
 
     splitMsg.forEach(letter => {
       if(letter === "r" || letter === "R") {
-        // const randNum = Math.floor(Math.random() * 2)
         if(letter === "r") {
-          newMsg.push("arrrgh")
+          newMsg.push("arrgh")
         } else {
-          newMsg.push("Arrrgh")
+          newMsg.push("Arrgh")
         }
       } else {
         newMsg.push(letter)
       }
     })
-    return newMsg.join("")
+
+    let string = newMsg.join("")
+
+    if(randNum > 4) {
+      return prepend += string
+    } else {
+      return string += append
+    }
   }
 }
