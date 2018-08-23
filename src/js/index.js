@@ -9,33 +9,35 @@ document.addEventListener("DOMContentLoaded", () => {
 
   chatWebSocket.onopen = (event) => {
     const subscribeMsg = {"command":"subscribe","identifier":"{\"channel\":\"ChatMessagesChannel\"}"}
-
     chatWebSocket.send(JSON.stringify(subscribeMsg))
+    renderChatMessage("You have joined the channel.")
   }
 
   const onlineList = document.getElementById('online-list')
   const chatContent = document.querySelector("#chat-content")
   chatWebSocket.onmessage = event => {
     const result = JSON.parse(event.data)
+    console.log("chatsocket", result)
+    let username = "blah"
     if(result["message"]["content"]) {
-      if(result["message"]["username"] === "null"){
-        const newText = new Lol(result["message"]["content"])
-        const newMessage = document.createElement("p")
-        newMessage.innerText = `Anon: ${newText.randomEffect()}`
-        chatContent.append(newMessage)
-      } else {
-        const user = result["message"]["username"]
-        const newText = new Lol(result["message"]["content"])
-        const newMessage = document.createElement("p")
-        newMessage.innerText = `${user}: ${newText.randomEffect()}`
-        chatContent.append(newMessage)
+
+      if(result["message"]["username"] === "null") {
+        username = "Anon"
       }
+      else {
+        username = result["message"]["username"]
+      }
+
+      const newText = new Lol(result["message"]["content"])
+      renderChatMessage(`${username}: ${newText.randomEffect()}`)
     }
+
     scrollDown()
   }
 
   userWebSocket.onmessage = event => {
     const result = JSON.parse(event.data)
+    console.log("usersocket", result)
     if (result["message"]["username"]) {
       const user = result["message"]["username"]
       const onlineNow = document.createElement('li')
@@ -110,6 +112,21 @@ document.addEventListener("DOMContentLoaded", () => {
     currentU.append(logoutBtn)
   }
 })
+
+function isLoggedIn() {
+  if(sessionStorage.getItem('username')) {
+    return sessionStorage.getItem('username')
+  } else {
+    return "Anon"
+  }
+}
+
+function renderChatMessage(msg) {
+  const chatContent = document.querySelector("#chat-content")
+  const newMessage = document.createElement("p")
+  newMessage.innerText = msg
+  chatContent.append(newMessage)
+}
 
 function scrollDown() {
   const chatContent = document.querySelector("#chat-content")
