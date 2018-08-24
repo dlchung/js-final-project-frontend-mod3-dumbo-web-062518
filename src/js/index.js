@@ -40,7 +40,7 @@ document.addEventListener("DOMContentLoaded", () => {
       currentUser = sessionStorage.getItem('username')
     }
 
-    console.log(currentUser)
+    // console.log(currentUser)
     const chatField = document.querySelector("#chat-field")
 
     const msg = {
@@ -69,7 +69,7 @@ function isLoggedIn() {
 function liveChatSocket(chatWebSocket) {
   chatWebSocket.onmessage = event => {
     const result = JSON.parse(event.data)
-    console.log("chatsocket", result)
+    // console.log("chatsocket", result)
 
     // if(result["type"] == "welcome") {
     //   if(isLoggedIn()) {
@@ -89,9 +89,8 @@ function liveChatSocket(chatWebSocket) {
         username = result["message"]["username"]
       }
       const newText = new Lol(result["message"]["content"])
-      // renderChatMessage(`${username}: ${newText.randomEffect()}`)
-      // renderChatMessage(username, newText.randomEffect())
-      renderChatMessage(`<font color="${sessionStorage.getItem('color')}">${username}</font> ${newText.randomEffect()}`)
+      renderChatMessage(username, newText.randomEffect())
+      // renderChatMessage(`<font color="${sessionStorage.getItem('color')}">${username}</font> ${newText.randomEffect()}`)
     }
 
     if(result["message"]["history"]) {
@@ -107,7 +106,7 @@ function liveChatSocket(chatWebSocket) {
 function liveUserSocket(userWebSocket) {
   userWebSocket.onmessage = event => {
     const result = JSON.parse(event.data)
-    console.log("usersocket", result)
+    // console.log("usersocket", result)
     if (result["message"]["username"]) {
       const userArray = [...result["message"]["username"]]
       renderOnlineUsers(userArray)
