@@ -72,9 +72,8 @@ function liveChatSocket(chatWebSocket) {
       else {
         username = result["message"]["username"]
       }
-
       const newText = new Lol(result["message"]["content"])
-      renderChatMessage(`${username}: ${newText.randomEffect()}`)
+      renderChatMessage(`<font color="${sessionStorage.getItem('color')}">${username}</font> ${newText.randomEffect()}`)
     }
 
     scrollDown()
@@ -95,7 +94,7 @@ function liveUserSocket(userWebSocket) {
 function renderChatMessage(msg) {
   const chatContent = document.querySelector("#chat-content")
   const newMessage = document.createElement("p")
-  newMessage.innerText = msg
+  newMessage.innerHTML = msg
   chatContent.append(newMessage)
 }
 
@@ -108,7 +107,7 @@ function renderOnlineUsers(userArray) {
   })
   usernameArray.sort().forEach(username => {
     const onlineNow = document.createElement('li')
-    onlineNow.innerText = username
+    onlineNow.innerHTML = username
     onlineList.append(onlineNow)
   })
 }
@@ -117,6 +116,7 @@ function createCurrentUser(webSocket) {
   const userInput = document.querySelector("#user-field")
   sessionStorage.setItem('username', userInput.value)
   sessionStorage.setItem('identifier', makeId())
+  sessionStorage.setItem('color', Color.getRandomColor())
 
   const msg = {
     "command":"message",
@@ -124,7 +124,7 @@ function createCurrentUser(webSocket) {
     "data":`{
       \"action\": \"user_join\",
       \"username\": \"${sessionStorage.getItem('username')}\",
-      \"identifier\": \"${sessionStorage.getItem('identifier')}\"
+      \"identifier\": \"${sessionStorage.getItem('identifier')}\",
     }`
   }
   webSocket.send(JSON.stringify(msg))
