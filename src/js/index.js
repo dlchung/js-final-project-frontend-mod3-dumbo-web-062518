@@ -34,15 +34,23 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const sendBtn = document.querySelector("#sendBtn")
   sendBtn.onclick = () => {
-    const chatField = document.querySelector("#chat-field")
     event.preventDefault()
+
+    let currentUser = "Anonymous"
+    if(isLoggedIn()) {
+      currentUser = sessionStorage.getItem('username')
+    }
+
+    console.log(currentUser)
+    const chatField = document.querySelector("#chat-field")
+
     const msg = {
       "command":"message",
       "identifier":"{\"channel\":\"ChatMessagesChannel\"}",
       "data":`{
-        \"action\": \"chat\",
+        \"action\": \"send_text\",
         \"content\": \"${chatField.value}\",
-        \"username\": \"${sessionStorage.getItem('username')}\"
+        \"username\": \"${currentUser}\"
       }`
     }
 
@@ -62,7 +70,7 @@ function isLoggedIn() {
 function liveChatSocket(chatWebSocket) {
   chatWebSocket.onmessage = event => {
     const result = JSON.parse(event.data)
-    // console.log("chatsocket", result)
+    console.log("chatsocket", result)
     let username = ""
     if(result["message"]["content"]) {
 
@@ -74,7 +82,14 @@ function liveChatSocket(chatWebSocket) {
       }
 
       const newText = new Lol(result["message"]["content"])
-      renderChatMessage(`${username}: ${newText.randomEffect()}`)
+      // renderChatMessage(`${username}: ${newText.randomEffect()}`)
+      renderChatMessage(username, newText.randomEffect())
+    }
+
+    if(result["message"]["history"]) {
+      const msgHistory = result["message"]["history"]
+      // console.log(msgHistory)
+      renderChatHistory(msgHistory)
     }
 
     scrollDown()
@@ -92,11 +107,20 @@ function liveUserSocket(userWebSocket) {
   }
 }
 
-function renderChatMessage(msg) {
+function renderChatMessage(username, text) {
+  const msg = `${username}: ${text}`
   const chatContent = document.querySelector("#chat-content")
   const newMessage = document.createElement("p")
   newMessage.innerText = msg
   chatContent.append(newMessage)
+}
+
+function renderChatHistory(msgArray) {
+  msgArray.forEach(msg => {
+    // console.log(msg)
+    const newText = new Lol(msg.content)
+    renderChatMessage(msg.username, newText.randomEffect())
+  })
 }
 
 function renderOnlineUsers(userArray) {
