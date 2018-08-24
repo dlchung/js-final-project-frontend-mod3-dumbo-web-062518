@@ -3,7 +3,6 @@ document.addEventListener("DOMContentLoaded", () => {
   chatWebSocket.onopen = (event) => {
     const subscribeMsg = {"command":"subscribe","identifier":"{\"channel\":\"ChatMessagesChannel\"}"}
     chatWebSocket.send(JSON.stringify(subscribeMsg))
-    renderChatMessage("You have joined the channel.")
   }
 
   const userWebSocket = openConnection()
@@ -71,6 +70,15 @@ function liveChatSocket(chatWebSocket) {
   chatWebSocket.onmessage = event => {
     const result = JSON.parse(event.data)
     console.log("chatsocket", result)
+
+    // if(result["type"] == "welcome") {
+    //   if(isLoggedIn()) {
+    //     renderJoinedMessage(sessionStorage.getItem('username'))
+    //   } else {
+    //     renderJoinedMessage("Anonymous")
+    //   }
+    // }
+
     let username = ""
     if(result["message"]["content"]) {
 
@@ -81,18 +89,15 @@ function liveChatSocket(chatWebSocket) {
         username = result["message"]["username"]
       }
       const newText = new Lol(result["message"]["content"])
-<<<<<<< HEAD
-      renderChatMessage(`<font color="${sessionStorage.getItem('color')}">${username}</font> ${newText.randomEffect()}`)
-=======
       // renderChatMessage(`${username}: ${newText.randomEffect()}`)
-      renderChatMessage(username, newText.randomEffect())
+      // renderChatMessage(username, newText.randomEffect())
+      renderChatMessage(`<font color="${sessionStorage.getItem('color')}">${username}</font> ${newText.randomEffect()}`)
     }
 
     if(result["message"]["history"]) {
       const msgHistory = result["message"]["history"]
       // console.log(msgHistory)
       renderChatHistory(msgHistory)
->>>>>>> chat-history
     }
 
     scrollDown()
@@ -102,25 +107,39 @@ function liveChatSocket(chatWebSocket) {
 function liveUserSocket(userWebSocket) {
   userWebSocket.onmessage = event => {
     const result = JSON.parse(event.data)
-    // console.log("usersocket", result)
+    console.log("usersocket", result)
     if (result["message"]["username"]) {
       const userArray = [...result["message"]["username"]]
       renderOnlineUsers(userArray)
     }
+
+    if(result["message"]["new_user"]) {
+      renderJoinedMessage(result["message"]["new_user"])
+    }
   }
+}
+
+function renderJoinedMessage(username) {
+  const text = `${username} has joined the channel.`
+  const chatContent = document.querySelector("#chat-content")
+  const newMessage = document.createElement("p")
+  newMessage.innerText = text
+  chatContent.append(newMessage)
+  // console.log(username)
 }
 
 function renderChatMessage(username, text) {
   const msg = `${username}: ${text}`
   const chatContent = document.querySelector("#chat-content")
   const newMessage = document.createElement("p")
-  newMessage.innerHTML = msg
+  newMessage.innerText = msg
+  // console.log("msg", msg)
   chatContent.append(newMessage)
 }
 
 function renderChatHistory(msgArray) {
   msgArray.forEach(msg => {
-    // console.log(msg)
+    // console.log("history", msg)
     const newText = new Lol(msg.content)
     renderChatMessage(msg.username, newText.randomEffect())
   })
@@ -152,7 +171,7 @@ function createCurrentUser(webSocket) {
     "data":`{
       \"action\": \"user_join\",
       \"username\": \"${sessionStorage.getItem('username')}\",
-      \"identifier\": \"${sessionStorage.getItem('identifier')}\",
+      \"identifier\": \"${sessionStorage.getItem('identifier')}\"
     }`
   }
   webSocket.send(JSON.stringify(msg))
@@ -189,7 +208,7 @@ function toggleLoginLogout() {
   if(isLoggedIn()) {
     loginDiv.style.display = "none"
     logoutDiv.style.display = "block"
-    document.getElementById('welcome').innerText = `Welcome ${sessionStorage['username']}!`
+    document.getElementById('welcome').innerText = `Welcome ${sessionStorage.getItem('username')}!`
   }
   else {
     loginDiv.style.display = "block"
