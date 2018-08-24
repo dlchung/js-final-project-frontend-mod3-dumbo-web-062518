@@ -86,7 +86,7 @@ function liveChatSocket(chatWebSocket) {
       const color = result["message"]["color"]
       const newText = new Lol(result["message"]["content"])
       // renderChatMessage(username, newText.randomEffect())
-      renderChatMessage(`<span style="color: ${color}">${username}</style>`, newText.randomEffect())
+      renderChatMessage(`<span style="color: ${color}">${username}</span>`, newText.randomEffect())
       audioMsgNotify(username)
       // console.log(username, sessionStorage.getItem('username'))
     }
