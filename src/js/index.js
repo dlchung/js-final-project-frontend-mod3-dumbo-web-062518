@@ -1,59 +1,62 @@
 document.addEventListener("DOMContentLoaded", () => {
   const chatWebSocket = openConnection()
-  const userWebSocket = openConnection()
-
-  userWebSocket.onopen = (event) => {
-    const subscribeUser = {"command":"subscribe","identifier":"{\"channel\":\"UsersOnlineChannel\"}"}
-    userWebSocket.send(JSON.stringify(subscribeUser))
-  }
-
   chatWebSocket.onopen = (event) => {
     const subscribeMsg = {"command":"subscribe","identifier":"{\"channel\":\"ChatMessagesChannel\"}"}
     chatWebSocket.send(JSON.stringify(subscribeMsg))
     renderChatMessage("You have joined the channel.")
   }
 
+  const userWebSocket = openConnection()
+  userWebSocket.onopen = (event) => {
+    const subscribeUser = {"command":"subscribe","identifier":"{\"channel\":\"UsersOnlineChannel\"}"}
+    userWebSocket.send(JSON.stringify(subscribeUser))
+  }
+
   const onlineList = document.getElementById('online-list')
   const chatContent = document.querySelector("#chat-content")
-  chatWebSocket.onmessage = event => {
-    const result = JSON.parse(event.data)
-    console.log("chatsocket", result)
-    let username = "blah"
-    if(result["message"]["content"]) {
 
-      if(result["message"]["username"] === "null") {
-        username = "Anon"
-      }
-      else {
-        username = result["message"]["username"]
-      }
+  liveChatSocket(chatWebSocket)
+  liveUserSocket(userWebSocket)
 
-      const newText = new Lol(result["message"]["content"])
-      renderChatMessage(`${username}: ${newText.randomEffect()}`)
-    }
+  // chatWebSocket.onmessage = event => {
+  //   const result = JSON.parse(event.data)
+  //   console.log("chatsocket", result)
+  //   let username = ""
+  //   if(result["message"]["content"]) {
+  //
+  //     if(result["message"]["username"] === "null") {
+  //       username = "Anonymous"
+  //     }
+  //     else {
+  //       username = result["message"]["username"]
+  //     }
+  //
+  //     const newText = new Lol(result["message"]["content"])
+  //     renderChatMessage(`${username}: ${newText.randomEffect()}`)
+  //   }
+  //
+  //   scrollDown()
+  // }
 
-    scrollDown()
-  }
-
-  userWebSocket.onmessage = event => {
-    const result = JSON.parse(event.data)
-    console.log("usersocket", result)
-    if (result["message"]["username"]) {
-      const user = result["message"]["username"]
-      const onlineNow = document.createElement('li')
-      onlineNow.id = user
-      onlineNow.innerHTML = user
-      onlineList.append(onlineNow)
-    }
-    // else if (result["message"]["logout"]) {
-    //   sessionStorage.clear()
-    //   onlineUser.innerHTML = ''
-    //   currentU.innerHTML = ''
-    //   onlineList.innerHTML = "You are not logged in!"
-    //   h.innerText = 'Logged Out!'
-    //   currentU.append(h)
-    // }
-  }
+  // userWebSocket.onmessage = event => {
+  //   const result = JSON.parse(event.data)
+  //   console.log("usersocket", result)
+  //   if (result["message"]["username"]) {
+  //     const user = result["message"]["username"]
+  //     const onlineNow = document.createElement('li')
+  //     onlineNow.id = user
+  //     onlineNow.innerHTML = user
+  //     onlineList.append(onlineNow)
+  //   }
+  //   // else if (result["message"]["logout"]) {
+  //   //   sessionStorage.clear()
+  //   //   onlineUser.innerHTML = ''
+  //   //   currentU.innerHTML = ''
+  //   //   onlineList.innerHTML = "You are not logged in!"
+  //   //   h.innerText = 'Logged Out!'
+  //   //   currentU.append(h)
+  //   // }
+  // }
 
 
 
@@ -89,7 +92,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const currentUser = sessionStorage.setItem('username', userName.value)
 
-    const msg = {"command":"message","identifier":"{\"channel\":\"UsersOnlineChannel\"}","data":`{\"action\": \"user\", \"username\": \"${sessionStorage.getItem('username')}\"}`}
+    const msg = {"command":"message","identifier":"{\"channel\":\"UsersOnlineChannel\"}","data":`{\"action\": \"user_join\", \"username\": \"${sessionStorage.getItem('username')}\"}`}
     userWebSocket.send(JSON.stringify(msg))
 
     const logoutBtn = document.createElement('button')
@@ -117,7 +120,43 @@ function isLoggedIn() {
   if(sessionStorage.getItem('username')) {
     return sessionStorage.getItem('username')
   } else {
-    return "Anon"
+    return "Anonymous"
+  }
+}
+
+function liveChatSocket(chatWebSocket) {
+  chatWebSocket.onmessage = event => {
+    const result = JSON.parse(event.data)
+    console.log("chatsocket", result)
+    let username = ""
+    if(result["message"]["content"]) {
+
+      if(result["message"]["username"] === "null") {
+        username = "Anonymous"
+      }
+      else {
+        username = result["message"]["username"]
+      }
+
+      const newText = new Lol(result["message"]["content"])
+      renderChatMessage(`${username}: ${newText.randomEffect()}`)
+    }
+
+    scrollDown()
+  }
+}
+
+function liveUserSocket(userWebSocket) {
+  userWebSocket.onmessage = event => {
+    const result = JSON.parse(event.data)
+    console.log("usersocket", result)
+    if (result["message"]["username"]) {
+      const user = result["message"]["username"]
+      const onlineNow = document.createElement('li')
+      onlineNow.id = user
+      onlineNow.innerHTML = user
+      onlineList.append(onlineNow)
+    }
   }
 }
 
@@ -126,6 +165,10 @@ function renderChatMessage(msg) {
   const newMessage = document.createElement("p")
   newMessage.innerText = msg
   chatContent.append(newMessage)
+}
+
+function renderOnlineUsers(users) {
+
 }
 
 function scrollDown() {
