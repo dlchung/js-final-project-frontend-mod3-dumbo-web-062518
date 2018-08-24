@@ -15,37 +15,27 @@ document.addEventListener("DOMContentLoaded", () => {
   liveChatSocket(chatWebSocket)
   liveUserSocket(userWebSocket)
 
-  const userForm = document.getElementById('user-form')
+  toggleLoginLogout()
+
   const currentUser = document.getElementById('current-user')
-  const joinAppend = document.querySelector("#join-append")
 
-  if(isLoggedIn()) {
-    const userName = document.getElementById('user-field')
-    document.getElementById('welcome').innerHTML = `Welcome ${userName.value}!`
+  // const userName = document.getElementById('user-field')
 
-    const logoutBtn = document.querySelector("#logout-button")
 
-    logoutBtn.onclick = () => {
-
-      destroyCurrentUser(userWebSocket)
-
-      currentUser.innerHTML = ''
-      const h = document.createElement('h4')
-      document.getElementById('welcome').innerHTML = "Goodbye!"
-      currentUser.append(h)
-    }
+  const logoutBtn = document.querySelector("#logout-button")
+  logoutBtn.onclick = () => {
+    destroyCurrentUser(userWebSocket)
+    // document.getElementById('user-name').innerText = "Goodbye!"
+    document.getElementById('welcome').innerText = "Please login!"
+    toggleLoginLogout()
   }
-  else {
-    const userBtn = document.getElementById('submitUser')
 
-    userBtn.onclick = () => {
-      event.preventDefault()
-
-      createCurrentUser(userWebSocket)
-      document.getElementById('userForm').innerHTML = ''
-    }
-
-    joinAppend.append(userBtn)
+  const userBtn = document.getElementById('submitUser')
+  userBtn.onclick = () => {
+    event.preventDefault()
+    createCurrentUser(userWebSocket)
+    document.getElementById('welcome').innerText = `Welcome ${sessionStorage['username']}!`
+    toggleLoginLogout()
   }
 
   const chatField = document.querySelector("#chat-field")
@@ -166,6 +156,20 @@ function makeId() {
     text += possible.charAt(Math.floor(Math.random() * possible.length));
 
   return text;
+}
+
+function toggleLoginLogout() {
+  const loginDiv = document.querySelector("#login")
+  const logoutDiv = document.querySelector("#logout")
+
+  if(isLoggedIn()) {
+    loginDiv.style.display = "none"
+    logoutDiv.style.display = "block"
+  }
+  else {
+    loginDiv.style.display = "block"
+    logoutDiv.style.display = "none"
+  }
 }
 
 function scrollDown() {
