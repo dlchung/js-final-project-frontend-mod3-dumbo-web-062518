@@ -19,14 +19,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const currentUser = document.getElementById('current-user')
 
-  // const userName = document.getElementById('user-field')
-
-
   const logoutBtn = document.querySelector("#logout-button")
   logoutBtn.onclick = () => {
     destroyCurrentUser(userWebSocket)
-    // document.getElementById('user-name').innerText = "Goodbye!"
-    document.getElementById('welcome').innerText = "Please login!"
+    document.getElementById('welcome').innerText = "Enter a username!"
     toggleLoginLogout()
   }
 
@@ -42,8 +38,6 @@ document.addEventListener("DOMContentLoaded", () => {
   const sendBtn = document.querySelector("#sendBtn")
   sendBtn.onclick = () => {
     event.preventDefault()
-    // const msg = JSON.stringify(chatField.value)
-    // const msg = {"command":"message","identifier":"{\"channel\":\"ChatMessagesChannel\"}","data":"{\"message\":\"hello\",\"action\":\"chat\"}"}
     const msg = {
       "command":"message",
       "identifier":"{\"channel\":\"ChatMessagesChannel\"}",

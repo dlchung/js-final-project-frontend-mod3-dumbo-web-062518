@@ -1,20 +1,20 @@
-class User {
-  constructor() {
-
-  }
-}
-
-class Channel {
-  constructor() {
-
-  }
-}
-
-class Message {
-  constructor() {
-
-  }
-}
+// class User {
+//   constructor() {
+//
+//   }
+// }
+//
+// class Channel {
+//   constructor() {
+//
+//   }
+// }
+//
+// class Message {
+//   constructor() {
+//
+//   }
+// }
 
 class Lol {
   constructor(message) {
