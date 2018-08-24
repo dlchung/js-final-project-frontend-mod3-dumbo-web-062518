@@ -43,14 +43,6 @@ document.addEventListener("DOMContentLoaded", () => {
       onlineNow.innerHTML = user
       onlineList.append(onlineNow)
     }
-    // else if (result["message"]["logout"]) {
-    //   sessionStorage.clear()
-    //   onlineUser.innerHTML = ''
-    //   currentU.innerHTML = ''
-    //   onlineList.innerHTML = "You are not logged in!"
-    //   h.innerText = 'Logged Out!'
-    //   currentU.append(h)
-    // }
   }
 
 
@@ -71,10 +63,10 @@ document.addEventListener("DOMContentLoaded", () => {
   const userName = document.getElementById('user-field')
   const userBtn = document.getElementById('submitUser')
   userBtn.onclick = () => {
-    // event.preventDefault()
+    event.preventDefault()
 
     document.getElementById('userForm').innerHTML = ''
-    document.getElementById('user-name').innerHTML = `Logged in as: ${userName.value}`
+    document.getElementById('welcome').innerHTML = `Welcome ${userName.value}!`
 
     // const welcomeMessage = document.createElement("p")
     // const onlineNow = document.createElement('li')
@@ -92,7 +84,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const logoutBtn = document.createElement('button')
     logoutBtn.innerText = "Logout"
-    logoutBtn.className = "btn btn-danger"
+    logoutBtn.className = "btn btn-danger btn-sm"
     logoutBtn.onclick = () => {
       const onlineUser = document.getElementById(`${sessionStorage.getItem('username')}`)
       const msg = {"command":"message","identifier":"{\"channel\":\"UsersOnlineChannel\"}","data":`{\"action\": \"user\", \"username\": \"${sessionStorage.getItem('username')}\", \"logout\": \"${sessionStorage.getItem('username')}}`}
@@ -102,7 +94,7 @@ document.addEventListener("DOMContentLoaded", () => {
       currentU.innerHTML = ''
       onlineList.innerHTML = "You are not logged in!"
       const h = document.createElement('h4')
-      h.innerText = 'Logged Out!'
+      document.getElementById('welcome').innerHTML = "Goodbye!"
       currentU.append(h)
 
 
