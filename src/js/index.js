@@ -73,14 +73,6 @@ function liveChatSocket(chatWebSocket) {
     const result = JSON.parse(event.data)
     // console.log("chatsocket", result)
 
-    // if(result["type"] == "welcome") {
-    //   if(isLoggedIn()) {
-    //     renderJoinedMessage(sessionStorage.getItem('username'))
-    //   } else {
-    //     renderJoinedMessage("Anonymous")
-    //   }
-    // }
-
     let username = ""
     if(result["message"]["content"]) {
 
@@ -93,8 +85,10 @@ function liveChatSocket(chatWebSocket) {
       // console.log(result["message"]["color"])
       const color = result["message"]["color"]
       const newText = new Lol(result["message"]["content"])
-      renderChatMessage(`<font color="${color}">${username}</font>`, newText.randomEffect())
-      // renderChatMessage(`<font color="${sessionStorage.getItem('color')}">${username}</font> ${newText.randomEffect()}`)
+      // renderChatMessage(username, newText.randomEffect())
+      renderChatMessage(`<span style="color: ${color}">${username}</style>`, newText.randomEffect())
+      audioMsgNotify(username)
+      // console.log(username, sessionStorage.getItem('username'))
     }
 
     if(result["message"]["history"]) {
@@ -102,8 +96,6 @@ function liveChatSocket(chatWebSocket) {
       // console.log(msgHistory)
       renderChatHistory(msgHistory)
     }
-
-    scrollDown()
   }
 }
 
@@ -119,10 +111,12 @@ function liveUserSocket(userWebSocket) {
 
     if(result["message"]["new_user"]) {
       renderJoinedMessage(result["message"]["new_user"])
+      audioJoin()
     }
 
     if(result["message"]["bye_user"]) {
       renderLeftMessage(result["message"]["bye_user"])
+      audioLeave()
     }
   }
 }
@@ -133,7 +127,7 @@ function renderJoinedMessage(username) {
   const newMessage = document.createElement("p")
   newMessage.innerText = text
   chatContent.append(newMessage)
-  // console.log(username)
+  scrollDown()
 }
 
 function renderLeftMessage(username) {
@@ -142,6 +136,7 @@ function renderLeftMessage(username) {
   const newMessage = document.createElement("p")
   newMessage.innerText = text
   chatContent.append(newMessage)
+  scrollDown()
 }
 
 function renderChatMessage(username, text) {
@@ -151,6 +146,7 @@ function renderChatMessage(username, text) {
   newMessage.innerHTML = msg
   // console.log("msg", msg)
   chatContent.append(newMessage)
+  scrollDown()
 }
 
 function renderChatHistory(msgArray) {
@@ -159,6 +155,7 @@ function renderChatHistory(msgArray) {
     const newText = new Lol(msg.content)
     renderChatMessage(msg.username, newText.randomEffect())
   })
+  scrollDown()
 }
 
 function renderOnlineUsers(userArray) {
@@ -239,4 +236,24 @@ function toggleLoginLogout() {
 function scrollDown() {
   const chatContent = document.querySelector("#chat-content")
   chatContent.scrollTop = chatContent.scrollHeight
+}
+
+function audioJoin() {
+  const audio = new Audio("./audio/dooropen.wav")
+  audio.play()
+}
+
+function audioLeave() {
+  const audio = new Audio("./audio/doorslam.wav")
+  audio.play()
+}
+
+function audioMsgNotify(username) {
+  if(username === sessionStorage.getItem['username']) {
+    const audio = new Audio("./audio/imsend.wav")
+    audio.play()
+  } else {
+    const audio = new Audio("./audio/imrcv.wav")
+    audio.play()
+  }
 }
