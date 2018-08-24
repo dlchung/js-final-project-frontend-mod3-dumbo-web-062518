@@ -18,7 +18,11 @@
 
 class Lol {
   constructor(message) {
-    this.message = message
+    if(message !== null) {
+      this.message = message
+    } else {
+      this.message = "..."
+    }
   }
 
   randomEffect() {
