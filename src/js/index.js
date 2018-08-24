@@ -115,6 +115,10 @@ function liveUserSocket(userWebSocket) {
     if(result["message"]["new_user"]) {
       renderJoinedMessage(result["message"]["new_user"])
     }
+
+    if(result["message"]["bye_user"]) {
+      renderLeftMessage(result["message"]["bye_user"])
+    }
   }
 }
 
@@ -125,6 +129,14 @@ function renderJoinedMessage(username) {
   newMessage.innerText = text
   chatContent.append(newMessage)
   // console.log(username)
+}
+
+function renderLeftMessage(username) {
+  const text = `${username} has left the channel.`
+  const chatContent = document.querySelector("#chat-content")
+  const newMessage = document.createElement("p")
+  newMessage.innerText = text
+  chatContent.append(newMessage)
 }
 
 function renderChatMessage(username, text) {
