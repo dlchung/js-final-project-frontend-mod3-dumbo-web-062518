@@ -43,7 +43,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const newMsg = new Lol(chatField.value)
     const effect = newMsg.randomEffectName()
 
-    console.log(effect)
+    // console.log(effect)
 
     const msg = {
       "command":"message",
@@ -88,13 +88,14 @@ function liveChatSocket(chatWebSocket) {
       const color = result["message"]["color"]
       const newText = new Lol(result["message"]["content"])
       const styledText = newText.applyEffect(result["message"]["effect"])
-      console.log(result["message"]["effect"], styledText)
+      // const styledText = newText.message
+      // console.log(result["message"]["effect"], styledText)
       renderChatMessage(`<span style="color: ${color}">${username}</span>`, styledText)
       audioMsgNotify(username)
     }
 
     if(result["message"]["history"]) {
-      renderChatHistory(msgHistory)
+      renderChatHistory(result["message"]["history"])
     }
   }
 }
@@ -104,7 +105,7 @@ function liveUserSocket(userWebSocket) {
     const result = JSON.parse(event.data)
     // console.log("usersocket", result)
     if (result["message"]["username"]) {
-      console.log(result["message"]["username"])
+      // console.log(result["message"]["username"])
       const userArray = [...result["message"]["username"]]
       // console.log(userArray)
       renderOnlineUsers(userArray)
