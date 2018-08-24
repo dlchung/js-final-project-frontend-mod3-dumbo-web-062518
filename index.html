@@ -33,17 +33,23 @@
         </div>
         <div id="chat-online" class="col-4">
           <span><img src="./imgs/friendship.svg" class="img-resize"><span id="welcome">Please login!</span></span>
-          <div id="currentU">
+          <div id="current-user">
             <h5 id="user-name"></h5>
           </div>
-          <form id="userForm">
-            <div class="input-group">
-              <input type="text" name="user-field" id="user-field" class="form-control" placeholder="username">
-              <div class="input-group-append">
-              <input type="submit" name="submit" id="submitUser" class="btn btn-outline-primary"></input>
+          <div id="login">
+            <form id="user-form">
+              <div class="input-group">
+                <input type="text" name="user-field" id="user-field" class="form-control" placeholder="username">
+                <div class="input-group-append" id="join-append">
+                  <input type="submit" name="submit" id="submitUser" class="btn btn-outline-primary" value="Join"></input>
+                </div>
               </div>
-            </div>
-          </form>
+            </form>
+          </div>
+          <div id="logout">
+            <button type="button" name="logout" class="btn btn-danger btn-sm" id="logout-button">Logout</button>
+          </div>
+
           <hr/>
           <h5 class="online-title">Currently Online</h5>
             <ul id="online-list">

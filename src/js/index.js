@@ -12,11 +12,41 @@ document.addEventListener("DOMContentLoaded", () => {
     userWebSocket.send(JSON.stringify(subscribeUser))
   }
 
-  // const onlineList = document.getElementById('online-list')
-  // const chatContent = document.querySelector("#chat-content")
-
   liveChatSocket(chatWebSocket)
   liveUserSocket(userWebSocket)
+
+  const userForm = document.getElementById('user-form')
+  const currentUser = document.getElementById('current-user')
+  const joinAppend = document.querySelector("#join-append")
+
+  if(isLoggedIn()) {
+    const userName = document.getElementById('user-field')
+    document.getElementById('welcome').innerHTML = `Welcome ${userName.value}!`
+
+    const logoutBtn = document.querySelector("#logout-button")
+
+    logoutBtn.onclick = () => {
+
+      destroyCurrentUser(userWebSocket)
+
+      currentUser.innerHTML = ''
+      const h = document.createElement('h4')
+      document.getElementById('welcome').innerHTML = "Goodbye!"
+      currentUser.append(h)
+    }
+  }
+  else {
+    const userBtn = document.getElementById('submitUser')
+
+    userBtn.onclick = () => {
+      event.preventDefault()
+
+      createCurrentUser(userWebSocket)
+      document.getElementById('userForm').innerHTML = ''
+    }
+
+    joinAppend.append(userBtn)
+  }
 
   const chatField = document.querySelector("#chat-field")
   const sendBtn = document.querySelector("#sendBtn")
@@ -36,59 +66,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
     chatWebSocket.send(JSON.stringify(msg))
     chatField.value = ""
-    // console.log(msg)
-  }
-
-  const currentU = document.getElementById('currentU')
-  const userName = document.getElementById('user-field')
-
-  const userBtn = document.getElementById('submitUser')
-  userBtn.onclick = () => {
-    event.preventDefault()
-
-    createUserSession()
-    document.getElementById('userForm').innerHTML = ''
-    document.getElementById('welcome').innerHTML = `Welcome ${userName.value}!`
-
-
-    const msg = {
-      "command":"message",
-      "identifier":"{\"channel\":\"UsersOnlineChannel\"}",
-      "data":`{
-        \"action\": \"user_join\",
-        \"username\": \"${sessionStorage.getItem('username')}\",
-        \"identifier\": \"${sessionStorage.getItem('identifier')}\"
-        }`
-      }
-    userWebSocket.send(JSON.stringify(msg))
-
-    const logoutBtn = document.createElement('button')
-    logoutBtn.innerText = "Logout"
-    logoutBtn.className = "btn btn-danger btn-sm"
-    logoutBtn.onclick = () => {
-      // const onlineUser = document.getElementById(`${sessionStorage.getItem('username')}`)
-      const msg = {
-        "command":"message",
-        "identifier":"{\"channel\":\"UsersOnlineChannel\"}",
-        "data":`{
-          \"action\": \"user_leave\",
-          \"identifier\": \"${sessionStorage.getItem('identifier')}\"
-        }`
-      }
-
-      destroyCurrentUser(userWebSocket, msg)
-
-
-      onlineUser.innerHTML = ''
-      currentU.innerHTML = ''
-      // onlineList.innerHTML = "You are not logged in!"
-      const h = document.createElement('h4')
-      document.getElementById('welcome').innerHTML = "Goodbye!"
-      currentU.append(h)
-
-
-    }
-    currentU.append(logoutBtn)
   }
 })
 
@@ -96,7 +73,7 @@ function isLoggedIn() {
   if(sessionStorage.getItem('username')) {
     return sessionStorage.getItem('username')
   } else {
-    return "Anonymous"
+    return undefined
   }
 }
 
@@ -150,13 +127,33 @@ function renderOnlineUsers(userArray) {
   })
 }
 
-function createUserSession() {
+function createCurrentUser(webSocket) {
   const userInput = document.querySelector("#user-field")
   sessionStorage.setItem('username', userInput.value)
   sessionStorage.setItem('identifier', makeId())
+
+  const msg = {
+    "command":"message",
+    "identifier":"{\"channel\":\"UsersOnlineChannel\"}",
+    "data":`{
+      \"action\": \"user_join\",
+      \"username\": \"${sessionStorage.getItem('username')}\",
+      \"identifier\": \"${sessionStorage.getItem('identifier')}\"
+    }`
+  }
+  webSocket.send(JSON.stringify(msg))
 }
 
-function destroyCurrentUser(webSocket, msg) {
+function destroyCurrentUser(webSocket) {
+  const msg = {
+    "command":"message",
+    "identifier":"{\"channel\":\"UsersOnlineChannel\"}",
+    "data":`{
+      \"action\": \"user_leave\",
+      \"identifier\": \"${sessionStorage.getItem('identifier')}\"
+    }`
+  }
+
   webSocket.send(JSON.stringify(msg))
   sessionStorage.clear();
 }
