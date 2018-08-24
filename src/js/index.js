@@ -17,8 +17,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
   toggleLoginLogout()
 
-  const currentUser = document.getElementById('current-user')
-
   const logoutBtn = document.querySelector("#logout-button")
   logoutBtn.onclick = () => {
     destroyCurrentUser(userWebSocket)
@@ -26,7 +24,7 @@ document.addEventListener("DOMContentLoaded", () => {
     toggleLoginLogout()
   }
 
-  const userBtn = document.getElementById('submitUser')
+  const userBtn = document.querySelector('#submitUser')
   userBtn.onclick = () => {
     event.preventDefault()
     createCurrentUser(userWebSocket)
@@ -34,9 +32,9 @@ document.addEventListener("DOMContentLoaded", () => {
     toggleLoginLogout()
   }
 
-  const chatField = document.querySelector("#chat-field")
   const sendBtn = document.querySelector("#sendBtn")
   sendBtn.onclick = () => {
+    const chatField = document.querySelector("#chat-field")
     event.preventDefault()
     const msg = {
       "command":"message",
