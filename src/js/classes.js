@@ -1,20 +1,3 @@
-// class User {
-//   constructor() {
-//
-//   }
-// }
-//
-// class Channel {
-//   constructor() {
-//
-//   }
-// }
-//
-// class Message {
-//   constructor() {
-//
-//   }
-// }
 
 class Lol {
   constructor(message) {
@@ -25,15 +8,29 @@ class Lol {
     }
   }
 
-  randomEffect() {
+  applyEffect(name) {
+    const effects = {
+      "reverse": this.reverseMessage(),
+      "upsidedown": this.upsideDown(),
+      "removevowels": this.removeVowels(),
+      "leetspeak": this.leetSpeak(),
+      "binary": this.binary(),
+      "piratespeak": this.pirateSpeak()
+    }
+
+    return effects[`${name}`]
+  }
+
+  randomEffectName() {
     const effects = [
-      this.reverseMessage(),
-      this.upsideDown(),
-      this.removeVowels(),
-      this.leetSpeak(),
-      this.binary(),
-      this.pirateSpeak()
+      "reverse",
+      "upsidedown",
+      "removevowels",
+      "leetspeak",
+      "binary",
+      "piratespeak"
     ]
+
     return effects[Math.floor(Math.random() * effects.length)]
   }
 

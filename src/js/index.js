@@ -19,7 +19,6 @@ document.addEventListener("DOMContentLoaded", () => {
   const logoutBtn = document.querySelector("#logout-button")
   logoutBtn.onclick = () => {
     destroyCurrentUser(userWebSocket)
-    // document.getElementById('welcome').innerText = "Enter a username!"
     toggleLoginLogout()
   }
 
@@ -27,7 +26,6 @@ document.addEventListener("DOMContentLoaded", () => {
   userBtn.onclick = () => {
     event.preventDefault()
     createCurrentUser(userWebSocket)
-    // document.getElementById('welcome').innerText = `Welcome ${sessionStorage['username']}!`
     toggleLoginLogout()
   }
 
@@ -42,6 +40,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // console.log(currentUser)
     const chatField = document.querySelector("#chat-field")
+    const newMsg = new Lol(chatField.value)
+    const effect = newMsg.randomEffectName()
+
+    console.log(effect)
 
     const msg = {
       "command":"message",
@@ -50,7 +52,8 @@ document.addEventListener("DOMContentLoaded", () => {
         \"action\": \"send_text\",
         \"content\": \"${chatField.value}\",
         \"username\": \"${currentUser}\",
-        \"color\": \"${sessionStorage.getItem('color')}\"
+        \"color\": \"${sessionStorage.getItem('color')}\",
+        \"effect\": \"${effect}\"
       }`
     }
 
@@ -82,18 +85,15 @@ function liveChatSocket(chatWebSocket) {
       else {
         username = result["message"]["username"]
       }
-      // console.log(result["message"]["color"])
       const color = result["message"]["color"]
       const newText = new Lol(result["message"]["content"])
-      // renderChatMessage(username, newText.randomEffect())
-      renderChatMessage(`<span style="color: ${color}">${username}</span>`, newText.randomEffect())
+      const styledText = newText.applyEffect(result["message"]["effect"])
+      console.log(result["message"]["effect"], styledText)
+      renderChatMessage(`<span style="color: ${color}">${username}</span>`, styledText)
       audioMsgNotify(username)
-      // console.log(username, sessionStorage.getItem('username'))
     }
 
     if(result["message"]["history"]) {
-      const msgHistory = result["message"]["history"]
-      // console.log(msgHistory)
       renderChatHistory(msgHistory)
     }
   }
@@ -146,16 +146,14 @@ function renderChatMessage(username, text) {
   const chatContent = document.querySelector("#chat-content")
   const newMessage = document.createElement("p")
   newMessage.innerHTML = msg
-  // console.log("msg", msg)
   chatContent.append(newMessage)
   scrollDown()
 }
 
 function renderChatHistory(msgArray) {
   msgArray.forEach(msg => {
-    // console.log("history", msg)
     const newText = new Lol(msg.content)
-    renderChatMessage(msg.username, newText.randomEffect())
+    renderChatMessage(msg.username, newText.applyEffect(msg.effect))
   })
   scrollDown()
 }
