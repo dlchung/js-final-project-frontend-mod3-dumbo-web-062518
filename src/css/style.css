@@ -63,3 +63,7 @@ html, body {
   width: 50px;
   margin: 10px;
 }
+
+#logout {
+  text-align: center;
+}
