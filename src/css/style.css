@@ -71,6 +71,20 @@ html, body {
   margin: 10px;
 }
 
+ul {
+  list-style: none;
+}
+
+.user-icon {
+  width: 25px;
+}
+
+.user-list-text {
+  font-size: 20px;
+  padding: 10px;
+  /* line-height: 30px; */
+}
+
 #logout {
   text-align: center;
 }

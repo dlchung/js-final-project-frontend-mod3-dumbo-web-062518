@@ -106,7 +106,9 @@ function liveUserSocket(userWebSocket) {
     if (result["message"]["username"]) {
       console.log(result["message"]["username"])
       const userArray = [...result["message"]["username"]]
+      // console.log(userArray)
       renderOnlineUsers(userArray)
+      onlineCheck(userArray)
     }
 
     if(result["message"]["new_user"]) {
@@ -167,7 +169,11 @@ function renderOnlineUsers(userArray) {
   })
   usernameArray.sort().forEach(username => {
     const onlineNow = document.createElement('li')
-    onlineNow.innerHTML = username
+    onlineNow.innerHTML = `
+      <span style="color: #FC388E" class="user-list-text">
+          <img src='./imgs/ducky.svg' class="user-icon"/> ${username}
+      </span>
+      `
     onlineList.append(onlineNow)
   })
 }
@@ -255,5 +261,15 @@ function audioMsgNotify(username) {
   } else {
     const audio = new Audio("./audio/imrcv.wav")
     audio.play()
+  }
+
+}
+
+function onlineCheck(userArray) {
+  const onlineTitle = document.getElementById('online-title')
+  if(userArray.length === 0) {
+    onlineTitle.innerText = "No one is online!"
+  } else {
+    onlineTitle.innerText = "Currently Online"
   }
 }
