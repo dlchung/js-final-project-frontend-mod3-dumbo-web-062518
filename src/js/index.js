@@ -20,7 +20,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const logoutBtn = document.querySelector("#logout-button")
   logoutBtn.onclick = () => {
     destroyCurrentUser(userWebSocket)
-    document.getElementById('welcome').innerText = "Enter a username!"
+    // document.getElementById('welcome').innerText = "Enter a username!"
     toggleLoginLogout()
   }
 
@@ -28,7 +28,7 @@ document.addEventListener("DOMContentLoaded", () => {
   userBtn.onclick = () => {
     event.preventDefault()
     createCurrentUser(userWebSocket)
-    document.getElementById('welcome').innerText = `Welcome ${sessionStorage['username']}!`
+    // document.getElementById('welcome').innerText = `Welcome ${sessionStorage['username']}!`
     toggleLoginLogout()
   }
 
@@ -62,7 +62,7 @@ function isLoggedIn() {
 function liveChatSocket(chatWebSocket) {
   chatWebSocket.onmessage = event => {
     const result = JSON.parse(event.data)
-    console.log("chatsocket", result)
+    // console.log("chatsocket", result)
     let username = ""
     if(result["message"]["content"]) {
 
@@ -84,7 +84,7 @@ function liveChatSocket(chatWebSocket) {
 function liveUserSocket(userWebSocket) {
   userWebSocket.onmessage = event => {
     const result = JSON.parse(event.data)
-    console.log("usersocket", result)
+    // console.log("usersocket", result)
     if (result["message"]["username"]) {
       const userArray = [...result["message"]["username"]]
       renderOnlineUsers(userArray)
@@ -101,10 +101,14 @@ function renderChatMessage(msg) {
 
 function renderOnlineUsers(userArray) {
   const onlineList = document.getElementById('online-list')
+  let usernameArray = []
   onlineList.innerHTML = ""
   userArray.forEach(user => {
+    usernameArray = usernameArray.concat(user.username)
+  })
+  usernameArray.sort().forEach(username => {
     const onlineNow = document.createElement('li')
-    onlineNow.innerText = user.username
+    onlineNow.innerText = username
     onlineList.append(onlineNow)
   })
 }
@@ -157,10 +161,12 @@ function toggleLoginLogout() {
   if(isLoggedIn()) {
     loginDiv.style.display = "none"
     logoutDiv.style.display = "block"
+    document.getElementById('welcome').innerText = `Welcome ${sessionStorage['username']}!`
   }
   else {
     loginDiv.style.display = "block"
     logoutDiv.style.display = "none"
+    document.getElementById('welcome').innerText = "Enter a username!"
   }
 }
 
