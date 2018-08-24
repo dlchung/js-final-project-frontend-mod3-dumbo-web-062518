@@ -18,48 +18,6 @@ document.addEventListener("DOMContentLoaded", () => {
   liveChatSocket(chatWebSocket)
   liveUserSocket(userWebSocket)
 
-  // chatWebSocket.onmessage = event => {
-  //   const result = JSON.parse(event.data)
-  //   console.log("chatsocket", result)
-  //   let username = ""
-  //   if(result["message"]["content"]) {
-  //
-  //     if(result["message"]["username"] === "null") {
-  //       username = "Anonymous"
-  //     }
-  //     else {
-  //       username = result["message"]["username"]
-  //     }
-  //
-  //     const newText = new Lol(result["message"]["content"])
-  //     renderChatMessage(`${username}: ${newText.randomEffect()}`)
-  //   }
-  //
-  //   scrollDown()
-  // }
-
-  // userWebSocket.onmessage = event => {
-  //   const result = JSON.parse(event.data)
-  //   console.log("usersocket", result)
-  //   if (result["message"]["username"]) {
-  //     const user = result["message"]["username"]
-  //     const onlineNow = document.createElement('li')
-  //     onlineNow.id = user
-  //     onlineNow.innerHTML = user
-  //     onlineList.append(onlineNow)
-  //   }
-  //   // else if (result["message"]["logout"]) {
-  //   //   sessionStorage.clear()
-  //   //   onlineUser.innerHTML = ''
-  //   //   currentU.innerHTML = ''
-  //   //   onlineList.innerHTML = "You are not logged in!"
-  //   //   h.innerText = 'Logged Out!'
-  //   //   currentU.append(h)
-  //   // }
-  // }
-
-
-
   const chatField = document.querySelector("#chat-field")
   const sendBtn = document.querySelector("#sendBtn")
   sendBtn.onclick = () => {
