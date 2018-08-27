@@ -87,8 +87,8 @@ function liveChatSocket(chatWebSocket) {
       }
       const color = result["message"]["color"]
       const newText = new Lol(result["message"]["content"])
-      // const styledText = newText.applyEffect(result["message"]["effect"])
-      const styledText = newText.message
+      const styledText = newText.applyEffect(result["message"]["effect"])
+      // const styledText = newText.message
       // console.log(result["message"]["effect"], styledText)
       renderChatMessage(`<span style="color: ${color}">${username}</span>`, styledText)
       audioMsgNotify(username)
@@ -154,8 +154,8 @@ function renderChatMessage(username, text) {
 function renderChatHistory(msgArray) {
   msgArray.forEach(msg => {
     const newText = new Lol(msg.content)
-    // renderChatMessage(msg.username, newText.applyEffect(msg.effect))
-    renderChatMessage(msg.username, newText.message)
+    renderChatMessage(msg.username, newText.applyEffect(msg.effect))
+    // renderChatMessage(msg.username, newText.message)
   })
   scrollDown()
 }
